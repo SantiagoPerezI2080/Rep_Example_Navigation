@@ -13,6 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -56,8 +60,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun startRecording() {
         // Configurar el archivo de salida
+        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val outputDir = externalCacheDir?.absolutePath ?: filesDir.absolutePath
-        outputFilePath = "$outputDir/recording.aac"  // Cambiar a formato AAC
+        outputFilePath = "$outputDir/recording_$timestamp.aac"
+
 
         // Configuración del MediaRecorder
         mediaRecorder = MediaRecorder().apply {
