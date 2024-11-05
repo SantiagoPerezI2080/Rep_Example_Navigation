@@ -16,8 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
 import java.io.File
+
+// Grabadora de voz
 
 class MainActivity : AppCompatActivity() {
     private lateinit var tvStatus: TextView

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Estado cuando el botón está presionado -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/darkCian"/>
+            <corners android:radius="10dp"/>
+        </shape>
+    </item>
+
+    <!-- Estado predeterminado -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="@color/cian"
+                android:endColor="@color/darkCian"
+                android:angle="270"
+                android:type="linear"/>
+            <corners android:radius="10dp"/>
+        </shape>
+    </item>
+</selector>
