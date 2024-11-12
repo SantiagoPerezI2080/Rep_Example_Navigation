@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
 class SecondFragment : Fragment() {
@@ -14,9 +16,16 @@ class SecondFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val name = args.name
-        val tvName= view.findViewById<TextView>(R.id.tvName)
+        val tvName = view.findViewById<TextView>(R.id.tvName)
         tvName.text = name
+
+        // Configura el botón para navegar a ThirdFragment
+        val buttonToThirdFragment = view.findViewById<Button>(R.id.buttonToThirdFragment)
+        buttonToThirdFragment.setOnClickListener {
+            findNavController().navigate(R.id.action_secondFragment_to_thirdFragment)
+        }
     }
 
     override fun onCreateView(

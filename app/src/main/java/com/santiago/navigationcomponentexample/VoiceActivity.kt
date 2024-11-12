@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,10 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
 import java.io.File
 
-class MainActivity : AppCompatActivity() {
+class VoiceActivity : AppCompatActivity() {
     private lateinit var tvStatus: TextView
     private lateinit var btnStart: Button
     private lateinit var btnStop: Button
@@ -64,12 +62,11 @@ class MainActivity : AppCompatActivity() {
         val outputDir = externalCacheDir?.absolutePath ?: filesDir.absolutePath
         outputFilePath = "$outputDir/recording_$timestamp.aac"
 
-
         // Configuración del MediaRecorder
         mediaRecorder = MediaRecorder().apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)  // Cambiar a AAC
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             setOutputFile(outputFilePath)
             prepare()
             start()
@@ -100,7 +97,6 @@ class MainActivity : AppCompatActivity() {
         val recordings = recordingsDir.listFiles { file -> file.extension == "aac" }?.toList() ?: listOf()
 
         rvRecordings.adapter = RecordingAdapter(recordings) { file: File -> playRecording(file) }
-
     }
 
     private fun playRecording(file: File) {
