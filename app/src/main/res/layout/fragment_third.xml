@@ -15,4 +15,14 @@
         android:backgroundTint="@color/blue"
         android:layout_gravity="center" />
 
+    <Button
+        android:id="@+id/btnOpenCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Abrir Cámara"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/green"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="50dp" />
+
 </FrameLayout>

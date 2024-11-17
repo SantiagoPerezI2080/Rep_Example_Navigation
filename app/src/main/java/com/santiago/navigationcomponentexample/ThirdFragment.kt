@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import android.widget.Button
 import com.santiago.navigationcomponentexample.view.VoiceActivity
+import com.santiago.navigationcomponentexample.view.CameraActivity
+
 
 class ThirdFragment : Fragment() {
 
@@ -21,6 +23,13 @@ class ThirdFragment : Fragment() {
         val btnOpenRecorder = view.findViewById<Button>(R.id.btnOpenRecorder)
         btnOpenRecorder.setOnClickListener {
             val intent = Intent(activity, VoiceActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Botón para abrir la cámara
+        val btnOpenCamera = view.findViewById<Button>(R.id.btnOpenCamera)
+        btnOpenCamera.setOnClickListener {
+            val intent = Intent(activity, CameraActivity::class.java)
             startActivity(intent)
         }
 
