@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import android.widget.Button
+import com.santiago.navigationcomponentexample.view.VoiceActivity
 
 class ThirdFragment : Fragment() {
 

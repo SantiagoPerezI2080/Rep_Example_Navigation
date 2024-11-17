@@ -1,4 +1,4 @@
-package com.santiago.navigationcomponentexample
+package com.santiago.navigationcomponentexample.view
 
 import android.view.LayoutInflater
 import android.view.View
