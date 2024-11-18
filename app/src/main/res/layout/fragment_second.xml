@@ -14,7 +14,6 @@
         android:text="Holiwi"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/buttonToThirdFragment"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
@@ -27,12 +26,12 @@
         android:layout_height="wrap_content"
         android:text="Ir a la tercera pantalla"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="30sp"
         android:backgroundTint="@color/green"
-        app:layout_constraintTop_toBottomOf="@id/tvName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_gravity="right"
         android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

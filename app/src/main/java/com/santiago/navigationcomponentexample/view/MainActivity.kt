@@ -1,21 +1,18 @@
-package com.santiago.navigationcomponentexample
+package com.santiago.navigationcomponentexample.view
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.Button
-import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.cristhian.miprimeraapp.databinding.ActivityMainBinding
-import com.cristhian.miprimeraapp.model.database.dao.UserDao
-import com.cristhian.miprimeraapp.model.database.entities.UserEntity
-import com.cristhian.miprimeraapp.model.database.providers.UsuarioDatabaseProvider
+import com.santiago.navigationcomponentexample.databinding.ActivityMainBinding
+import com.santiago.navigationcomponentexample.model.database.dao.UserDao
+import com.santiago.navigationcomponentexample.model.database.entities.UserEntity
+import com.santiago.navigationcomponentexample.model.database.providers.UsuarioDatabaseProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

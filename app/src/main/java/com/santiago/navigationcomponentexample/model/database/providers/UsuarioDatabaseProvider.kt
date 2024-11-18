@@ -2,12 +2,13 @@ package com.santiago.navigationcomponentexample.model.database.providers
 
 import android.content.Context
 import androidx.room.Room
-import com.cristhian.miprimeraapp.model.database.UsuarioDatabase
+import com.santiago.navigationcomponentexample.model.database.UsuarioDataBase
+
 object UsuarioDatabaseProvider {
-    fun getDatabase(context: Context): UsuarioDatabase {
+    fun getDatabase(context: Context): UsuarioDataBase {
         return Room.databaseBuilder(
             context,
-            UsuarioDatabase::class.java,
+            UsuarioDataBase::class.java,
             "app_database"
         ).build()
     }

@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.cristhian.miprimeraapp.R
-import com.cristhian.miprimeraapp.model.database.entities.UserEntity
+import com.santiago.navigationcomponentexample.R
+import com.santiago.navigationcomponentexample.model.database.entities.UserEntity
 
 class UsuarioAdapter(context: Context, usuarios: List<UserEntity>):
     ArrayAdapter<UserEntity>(context, 0, usuarios) {

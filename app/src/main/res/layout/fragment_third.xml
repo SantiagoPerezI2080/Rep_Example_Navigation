@@ -11,18 +11,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Abrir Grabadora"
+        android:textSize="22sp"
         android:textColor="@color/white"
         android:backgroundTint="@color/blue"
-        android:layout_gravity="center" />
+        android:layout_gravity="left" />
 
     <Button
         android:id="@+id/btnOpenCamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Abrir Cámara"
+        android:textSize="100sp"
         android:textColor="@color/white"
         android:backgroundTint="@color/green"
-        android:layout_gravity="center|bottom"
+        android:layout_gravity="center"
         android:layout_marginBottom="50dp" />
+
+    <Button
+        android:id="@+id/btnOpenRoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Abrir Room"
+        android:textSize="25sp"
+        android:textColor="@color/blue"
+        android:backgroundTint="@color/white"
+        android:layout_gravity="right"
+        android:layout_marginBottom="50dp"/>
 
 </FrameLayout>

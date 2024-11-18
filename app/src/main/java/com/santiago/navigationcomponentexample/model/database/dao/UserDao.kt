@@ -4,7 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.cristhian.miprimeraapp.model.database.entities.UserEntity
+import com.santiago.navigationcomponentexample.model.database.entities.UserEntity
+
 
 @Dao
 interface UserDao {
