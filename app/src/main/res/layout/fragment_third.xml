@@ -21,11 +21,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Abrir Cámara"
-        android:textSize="100sp"
         android:textColor="@color/white"
         android:backgroundTint="@color/green"
-        android:layout_gravity="center"
+        android:layout_gravity="center|bottom"
         android:layout_marginBottom="50dp" />
+
 
     <Button
         android:id="@+id/btnOpenRoom"

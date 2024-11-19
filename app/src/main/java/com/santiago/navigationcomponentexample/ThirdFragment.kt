@@ -35,6 +35,7 @@ class ThirdFragment : Fragment() {
             startActivity(intent)
         }
 
+
         // Botón para abrir Room (UsuarioAdapter o MainActivity relacionado con Room)
         val btnOpenRoom = view.findViewById<Button>(R.id.btnOpenRoom)
         btnOpenRoom.setOnClickListener {
