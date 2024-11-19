@@ -10,9 +10,7 @@ import android.widget.Button
 import com.santiago.navigationcomponentexample.view.VoiceActivity
 import com.santiago.navigationcomponentexample.view.CameraActivity
 import com.santiago.navigationcomponentexample.view.UsuarioAdapter
-import com.santiago.navigationcomponentexample.view.MainActivity
-
-
+import com.santiago.navigationcomponentexample.view.RoomActivity
 
 
 class ThirdFragment : Fragment() {
@@ -40,10 +38,9 @@ class ThirdFragment : Fragment() {
         // Botón para abrir Room (UsuarioAdapter o MainActivity relacionado con Room)
         val btnOpenRoom = view.findViewById<Button>(R.id.btnOpenRoom)
         btnOpenRoom.setOnClickListener {
-            val intent = Intent(activity, MainActivity::class.java)
+            val intent = Intent(activity, RoomActivity::class.java)
             startActivity(intent)
         }
-
 
         return view
     }

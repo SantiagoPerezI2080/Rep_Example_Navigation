@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
-import com.santiago.navigationcomponentexample.databinding.ActivityMainBinding
+import com.santiago.navigationcomponentexample.databinding.ActivityRoomBinding
 import com.santiago.navigationcomponentexample.model.database.dao.UserDao
 import com.santiago.navigationcomponentexample.model.database.entities.UserEntity
 import com.santiago.navigationcomponentexample.model.database.providers.UsuarioDatabaseProvider
@@ -14,13 +14,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+class RoomActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityRoomBinding
     private lateinit var usuarioAdapter: UsuarioAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val db = UsuarioDatabaseProvider.getDatabase(binding.root.context)
         // Obtener todos los usuarios y mostrarlos
