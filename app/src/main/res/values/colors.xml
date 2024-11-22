@@ -11,4 +11,6 @@
     <color name="botonSimb">#505050</color>
     <color name="charcoalBlue">#273F4F</color>
     <color name="darkPurple">#3E4A61</color>
+    <color name="selected_item">#FFDDDD</color>
+
 </resources>

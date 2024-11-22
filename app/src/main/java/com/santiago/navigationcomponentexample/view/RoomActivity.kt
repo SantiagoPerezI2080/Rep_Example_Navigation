@@ -1,69 +1,91 @@
 package com.santiago.navigationcomponentexample.view
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import com.santiago.navigationcomponentexample.databinding.ActivityRoomBinding
-import com.santiago.navigationcomponentexample.model.database.dao.UserDao
 import com.santiago.navigationcomponentexample.model.database.entities.UserEntity
 import com.santiago.navigationcomponentexample.model.database.providers.UsuarioDatabaseProvider
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class RoomActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityRoomBinding
     private lateinit var usuarioAdapter: UsuarioAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val db = UsuarioDatabaseProvider.getDatabase(binding.root.context)
-        // Obtener todos los usuarios y mostrarlos
-        val usuarioDao = db.getUserDao()
-        //eliminarUsuarios(usuarioDao)
-        obtenerUsuarios(usuarioDao)
-        val listaUsers:List<UserEntity> = listOf(
-            UserEntity(nombre = "Luis", apellido = "Perez"),
-            UserEntity(nombre = "Maria", apellido = "Rodriguez"),
-            UserEntity(nombre = "Margot", apellido = "Perales"),
-        )
-        CoroutineScope(Dispatchers.IO).launch {
-            val usuarios = db.getUserDao().insertAllUsers(listaUsers)
+
+        binding.etNombre.apply {
+            isLongClickable = false
+            setTextIsSelectable(false)
         }
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val usuarios = db.getUserDao().getAllUsers()
-//            if (usuarios.isNotEmpty())
-//                usuarios.forEach {
-//                    println("Usuario: ${it.nombre}, Apellido: ${it.apellido}")
-//                }
-//        }
-        // Inicializa el adaptador con una lista vacía por ahora
+
+        binding.etApellido.apply {
+            isLongClickable = false
+            setTextIsSelectable(false)
+        }
+
+
+        val db = UsuarioDatabaseProvider.getDatabase(applicationContext)
+        val usuarioDao = db.getUserDao()
+
+        // Inicializar el adaptador
         usuarioAdapter = UsuarioAdapter(this, mutableListOf())
         binding.lvUsers.adapter = usuarioAdapter
-        // Cargar los usuarios desde la base de datos
+
+        // Cargar usuarios
         cargarUsuarios()
-    }
-    private fun obtenerUsuarios(usuarioDao: UserDao) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val usuarios = usuarioDao.getAllUsers()
-            // Si deseas actualizar la UI, usa withContext para cambiar al hilo principal
-            withContext(Dispatchers.Main) {
-                usuarios.forEach { usuario ->
-                    println("Usuario: ${usuario.nombre}, Apellido: ${usuario.apellido}")
-                }
+
+        // Agregar usuario
+        binding.btnAgregarUsuario.setOnClickListener {
+            val nombre = binding.etNombre.text.toString().trim()
+            val apellido = binding.etApellido.text.toString().trim()
+
+            if (nombre.isNotEmpty() && apellido.isNotEmpty()) {
+                agregarUsuario(nombre, apellido)
+            } else {
+                Toast.makeText(this, "Por favor, ingresa nombre y apellido.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Eliminar usuario seleccionado
+        binding.btnEliminarUsuario.setOnClickListener {
+            val selectedUser = usuarioAdapter.getSelectedUser()
+            if (selectedUser != null) {
+                eliminarUsuario(selectedUser.id)
+            } else {
+                Toast.makeText(this, "Selecciona un usuario para eliminar.", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+    private fun agregarUsuario(nombre: String, apellido: String) {
+        val nuevoUsuario = UserEntity(nombre = nombre, apellido = apellido)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val usuarioDao = UsuarioDatabaseProvider.getDatabase(applicationContext).getUserDao()
+            usuarioDao.insertar(nuevoUsuario)
+            withContext(Dispatchers.Main) {
+                binding.etNombre.text.clear()
+                binding.etApellido.text.clear()
+                cargarUsuarios()
+                Toast.makeText(applicationContext, "Usuario agregado.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun cargarUsuarios() {
         val usuarioDao = UsuarioDatabaseProvider.getDatabase(applicationContext).getUserDao()
         lifecycleScope.launch(Dispatchers.IO) {
             val usuarios = usuarioDao.getAllUsers()
-            // Actualizar la lista en el hilo principal
             withContext(Dispatchers.Main) {
                 usuarioAdapter.clear()
                 usuarioAdapter.addAll(usuarios)
@@ -71,9 +93,15 @@ class RoomActivity : AppCompatActivity() {
             }
         }
     }
-    private fun eliminarUsuarios(usuarioDao: UserDao) {
+
+    private fun eliminarUsuario(id: Int) {
         lifecycleScope.launch(Dispatchers.IO) {
-            usuarioDao.eliminarTodos()
+            val usuarioDao = UsuarioDatabaseProvider.getDatabase(applicationContext).getUserDao()
+            usuarioDao.eliminarPorId(id)
+            withContext(Dispatchers.Main) {
+                cargarUsuarios()
+                Toast.makeText(applicationContext, "Usuario eliminado.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

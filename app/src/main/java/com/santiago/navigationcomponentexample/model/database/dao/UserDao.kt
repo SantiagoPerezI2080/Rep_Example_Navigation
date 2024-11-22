@@ -9,17 +9,13 @@ import com.santiago.navigationcomponentexample.model.database.entities.UserEntit
 
 @Dao
 interface UserDao {
-
-    //@Query("SELECT * FROM usuarios")
     @Query("SELECT * FROM usuarios ORDER BY nombre DESC")
-    suspend fun getAllUsers():List<UserEntity>
+    suspend fun getAllUsers(): List<UserEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllUsers(usuarios:List<UserEntity>)
-
-    @Insert
     suspend fun insertar(usuario: UserEntity)
 
-    @Query("DELETE FROM usuarios")
-    suspend fun eliminarTodos()
+    @Query("DELETE FROM usuarios WHERE id = :id")
+    suspend fun eliminarPorId(id: Int)
 }
+
