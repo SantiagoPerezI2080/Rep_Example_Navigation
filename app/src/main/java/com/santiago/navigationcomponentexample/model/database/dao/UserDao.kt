@@ -9,6 +9,7 @@ import com.santiago.navigationcomponentexample.model.database.entities.UserEntit
 
 @Dao
 interface UserDao {
+
     @Query("SELECT * FROM usuarios ORDER BY nombre DESC")
     suspend fun getAllUsers(): List<UserEntity>
 
@@ -17,5 +18,9 @@ interface UserDao {
 
     @Query("DELETE FROM usuarios WHERE id = :id")
     suspend fun eliminarPorId(id: Int)
+
+    @Query("UPDATE usuarios SET nombre = :nombre, apellido = :apellido WHERE id = :id")
+    suspend fun actualizarUsuario(id: Int, nombre: String, apellido: String)
 }
+
 

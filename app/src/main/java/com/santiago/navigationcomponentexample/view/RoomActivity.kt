@@ -33,7 +33,6 @@ class RoomActivity : AppCompatActivity() {
             setTextIsSelectable(false)
         }
 
-
         val db = UsuarioDatabaseProvider.getDatabase(applicationContext)
         val usuarioDao = db.getUserDao()
 
@@ -65,6 +64,30 @@ class RoomActivity : AppCompatActivity() {
                 Toast.makeText(this, "Selecciona un usuario para eliminar.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // Modificar usuario seleccionado
+        binding.btnModificarUsuario.setOnClickListener {
+            val selectedUser = usuarioAdapter.getSelectedUser()
+            if (selectedUser != null) {
+                // Rellenar los campos de nombre y apellido con los datos del usuario seleccionado
+                binding.etNombre.setText(selectedUser.nombre)
+                binding.etApellido.setText(selectedUser.apellido)
+
+                // Actualizar la base de datos con los nuevos datos
+                binding.btnAgregarUsuario.setOnClickListener {
+                    val nuevoNombre = binding.etNombre.text.toString().trim()
+                    val nuevoApellido = binding.etApellido.text.toString().trim()
+
+                    if (nuevoNombre.isNotEmpty() && nuevoApellido.isNotEmpty()) {
+                        modificarUsuario(selectedUser.id, nuevoNombre, nuevoApellido)
+                    } else {
+                        Toast.makeText(this, "Por favor, ingresa nombre y apellido.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Selecciona un usuario para modificar.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun agregarUsuario(nombre: String, apellido: String) {
@@ -78,6 +101,21 @@ class RoomActivity : AppCompatActivity() {
                 binding.etApellido.text.clear()
                 cargarUsuarios()
                 Toast.makeText(applicationContext, "Usuario agregado.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun modificarUsuario(id: Int, nombre: String, apellido: String) {
+        val usuarioModificado = UserEntity(id = id, nombre = nombre, apellido = apellido)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val usuarioDao = UsuarioDatabaseProvider.getDatabase(applicationContext).getUserDao()
+            usuarioDao.insertar(usuarioModificado)  // Usar el método insertar porque está configurado para reemplazar usuarios
+            withContext(Dispatchers.Main) {
+                binding.etNombre.text.clear()
+                binding.etApellido.text.clear()
+                cargarUsuarios()
+                Toast.makeText(applicationContext, "Usuario modificado.", Toast.LENGTH_SHORT).show()
             }
         }
     }
