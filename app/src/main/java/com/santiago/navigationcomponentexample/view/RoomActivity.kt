@@ -14,15 +14,17 @@ import kotlinx.coroutines.withContext
 
 class RoomActivity : AppCompatActivity() {
 
+    // Variables para vincular los elementos del layout y gestionar la lista de usuarios
     private lateinit var binding: ActivityRoomBinding
     private lateinit var usuarioAdapter: UsuarioAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge() // Activa la visualización en pantalla completa
         binding = ActivityRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Deshabilita las opciones de selección y pulsación larga en los campos de texto
         binding.etNombre.apply {
             isLongClickable = false
             setTextIsSelectable(false)
@@ -33,21 +35,23 @@ class RoomActivity : AppCompatActivity() {
             setTextIsSelectable(false)
         }
 
+        // Obtiene la instancia de la base de datos y el DAO
         val db = UsuarioDatabaseProvider.getDatabase(applicationContext)
         val usuarioDao = db.getUserDao()
 
-        // Inicializar el adaptador
+        // Inicializa el adaptador de usuarios para la lista
         usuarioAdapter = UsuarioAdapter(this, mutableListOf())
         binding.lvUsers.adapter = usuarioAdapter
 
-        // Cargar usuarios
+        // Carga los usuarios existentes en la base de datos
         cargarUsuarios()
 
-        // Agregar usuario
+        // Configura el botón para agregar un usuario
         binding.btnAgregarUsuario.setOnClickListener {
             val nombre = binding.etNombre.text.toString().trim()
             val apellido = binding.etApellido.text.toString().trim()
 
+            // Verifica que ambos campos no estén vacíos antes de agregar
             if (nombre.isNotEmpty() && apellido.isNotEmpty()) {
                 agregarUsuario(nombre, apellido)
             } else {
@@ -55,7 +59,7 @@ class RoomActivity : AppCompatActivity() {
             }
         }
 
-        // Eliminar usuario seleccionado
+        // Configura el botón para eliminar el usuario seleccionado
         binding.btnEliminarUsuario.setOnClickListener {
             val selectedUser = usuarioAdapter.getSelectedUser()
             if (selectedUser != null) {
@@ -65,19 +69,20 @@ class RoomActivity : AppCompatActivity() {
             }
         }
 
-        // Modificar usuario seleccionado
+        // Configura el botón para modificar el usuario seleccionado
         binding.btnModificarUsuario.setOnClickListener {
             val selectedUser = usuarioAdapter.getSelectedUser()
             if (selectedUser != null) {
-                // Rellenar los campos de nombre y apellido con los datos del usuario seleccionado
+                // Rellena los campos de texto con los datos del usuario seleccionado
                 binding.etNombre.setText(selectedUser.nombre)
                 binding.etApellido.setText(selectedUser.apellido)
 
-                // Actualizar la base de datos con los nuevos datos
+                // Configura la acción de actualizar cuando se haga clic en "Agregar Usuario"
                 binding.btnAgregarUsuario.setOnClickListener {
                     val nuevoNombre = binding.etNombre.text.toString().trim()
                     val nuevoApellido = binding.etApellido.text.toString().trim()
 
+                    // Verifica que los campos no estén vacíos antes de actualizar
                     if (nuevoNombre.isNotEmpty() && nuevoApellido.isNotEmpty()) {
                         modificarUsuario(selectedUser.id, nuevoNombre, nuevoApellido)
                     } else {
@@ -90,13 +95,15 @@ class RoomActivity : AppCompatActivity() {
         }
     }
 
+    // Agrega un nuevo usuario a la base de datos
     private fun agregarUsuario(nombre: String, apellido: String) {
         val nuevoUsuario = UserEntity(nombre = nombre, apellido = apellido)
 
         lifecycleScope.launch(Dispatchers.IO) {
             val usuarioDao = UsuarioDatabaseProvider.getDatabase(applicationContext).getUserDao()
-            usuarioDao.insertar(nuevoUsuario)
+            usuarioDao.insertar(nuevoUsuario) // Inserta el usuario en la base de datos
             withContext(Dispatchers.Main) {
+                // Limpia los campos de entrada y recarga la lista
                 binding.etNombre.text.clear()
                 binding.etApellido.text.clear()
                 cargarUsuarios()
@@ -105,13 +112,15 @@ class RoomActivity : AppCompatActivity() {
         }
     }
 
+    // Modifica un usuario existente en la base de datos
     private fun modificarUsuario(id: Int, nombre: String, apellido: String) {
         val usuarioModificado = UserEntity(id = id, nombre = nombre, apellido = apellido)
 
         lifecycleScope.launch(Dispatchers.IO) {
             val usuarioDao = UsuarioDatabaseProvider.getDatabase(applicationContext).getUserDao()
-            usuarioDao.insertar(usuarioModificado)  // Usar el método insertar porque está configurado para reemplazar usuarios
+            usuarioDao.insertar(usuarioModificado) // Usa `insertar` ya que reemplaza registros con el mismo ID
             withContext(Dispatchers.Main) {
+                // Limpia los campos de entrada y recarga la lista
                 binding.etNombre.text.clear()
                 binding.etApellido.text.clear()
                 cargarUsuarios()
@@ -120,26 +129,29 @@ class RoomActivity : AppCompatActivity() {
         }
     }
 
+    // Carga todos los usuarios desde la base de datos y actualiza el adaptador
     private fun cargarUsuarios() {
         val usuarioDao = UsuarioDatabaseProvider.getDatabase(applicationContext).getUserDao()
         lifecycleScope.launch(Dispatchers.IO) {
-            val usuarios = usuarioDao.getAllUsers()
+            val usuarios = usuarioDao.getAllUsers() // Obtiene todos los usuarios
             withContext(Dispatchers.Main) {
                 usuarioAdapter.clear()
                 usuarioAdapter.addAll(usuarios)
-                usuarioAdapter.notifyDataSetChanged()
+                usuarioAdapter.notifyDataSetChanged() // Notifica al adaptador de los cambios
             }
         }
     }
 
+    // Elimina un usuario de la base de datos según su ID
     private fun eliminarUsuario(id: Int) {
         lifecycleScope.launch(Dispatchers.IO) {
             val usuarioDao = UsuarioDatabaseProvider.getDatabase(applicationContext).getUserDao()
-            usuarioDao.eliminarPorId(id)
+            usuarioDao.eliminarPorId(id) // Elimina el usuario con el ID especificado
             withContext(Dispatchers.Main) {
-                cargarUsuarios()
+                cargarUsuarios() // Recarga la lista de usuarios
                 Toast.makeText(applicationContext, "Usuario eliminado.", Toast.LENGTH_SHORT).show()
             }
         }
     }
 }
+

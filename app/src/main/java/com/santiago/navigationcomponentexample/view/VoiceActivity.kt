@@ -19,10 +19,13 @@ import java.util.Locale
 import java.io.File
 
 class VoiceActivity : AppCompatActivity() {
+    // Elementos de la interfaz
     private lateinit var tvStatus: TextView
     private lateinit var btnStart: Button
     private lateinit var btnStop: Button
     private lateinit var rvRecordings: RecyclerView
+
+    // Variables para la grabación y reproducción
     private var mediaRecorder: MediaRecorder? = null
     private var outputFilePath: String = ""
     private var mediaPlayer: MediaPlayer? = null
@@ -31,25 +34,26 @@ class VoiceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_voice)
 
-        // Vincular elementos de la interfaz
+        // Vinculación de elementos de la interfaz con variables
         tvStatus = findViewById(R.id.tvStatus)
         btnStart = findViewById(R.id.btnStart)
         btnStop = findViewById(R.id.btnStop)
         rvRecordings = findViewById(R.id.rvRecordings)
 
-        // Configuración de botones
+        // Configuración de botones para grabar y detener
         btnStart.setOnClickListener { startRecording() }
         btnStop.setOnClickListener { stopRecording() }
 
-        // Verificar permisos de grabación
+        // Verifica los permisos para grabar audio
         checkPermissions()
 
-        // Inicialización de RecyclerView y carga de grabaciones
+        // Configura el RecyclerView para mostrar grabaciones
         rvRecordings.layoutManager = LinearLayoutManager(this)
-        loadRecordings()
+        loadRecordings() // Carga las grabaciones existentes
     }
 
     private fun checkPermissions() {
+        // Verifica si el permiso para grabar audio está otorgado
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), 200)
@@ -58,49 +62,53 @@ class VoiceActivity : AppCompatActivity() {
     }
 
     private fun startRecording() {
-        // Configurar el archivo de salida
+        // Configura el archivo de salida para la grabación
         val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val outputDir = externalCacheDir?.absolutePath ?: filesDir.absolutePath
         outputFilePath = "$outputDir/recording_$timestamp.aac"
 
-        // Configuración del MediaRecorder
+        // Configura MediaRecorder para iniciar la grabación
         mediaRecorder = MediaRecorder().apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             setOutputFile(outputFilePath)
-            prepare()
-            start()
+            prepare() // Prepara el recorder
+            start()   // Inicia la grabación
         }
 
-        // Actualizar estado y botones
+        // Actualiza el estado y los botones de la interfaz
         tvStatus.text = "Grabando..."
         btnStart.isEnabled = false
         btnStop.isEnabled = true
     }
 
     private fun stopRecording() {
+        // Detiene y libera el MediaRecorder
         mediaRecorder?.apply {
             stop()
             release()
         }
         mediaRecorder = null
 
-        // Actualizar estado y botones
+        // Actualiza el estado de la interfaz
         tvStatus.text = "Grabación detenida. Archivo guardado en $outputFilePath"
         btnStart.isEnabled = true
         btnStop.isEnabled = false
-        loadRecordings()  // Actualizar lista de grabaciones
+        loadRecordings() // Recarga la lista de grabaciones
     }
 
     private fun loadRecordings() {
+        // Obtiene todas las grabaciones en el directorio de almacenamiento
         val recordingsDir = File(externalCacheDir?.absolutePath ?: filesDir.absolutePath)
         val recordings = recordingsDir.listFiles { file -> file.extension == "aac" }?.toList() ?: listOf()
 
+        // Configura el adaptador para el RecyclerView
         rvRecordings.adapter = RecordingAdapter(recordings) { file: File -> playRecording(file) }
     }
 
     private fun playRecording(file: File) {
+        // Configura y reproduce la grabación seleccionada
         mediaPlayer?.release()
         mediaPlayer = MediaPlayer().apply {
             setDataSource(file.absolutePath)
@@ -111,8 +119,10 @@ class VoiceActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        // Libera el MediaPlayer al destruir la actividad
         super.onDestroy()
         mediaPlayer?.release()
         mediaPlayer = null
     }
 }
+
